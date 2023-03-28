@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs') %>
+</head>
+<body class="container">
+  <header>
+    <%- include('../partials/header.ejs') %>
+  </header>
+
+  <h2><%= itemData && itemData.drinkName %></h2>
+  <!-- <form onsubmit="testfunc()" id="expenseForm"> -->
+  <form onsubmit="alert('UPDATE SUCCESS!')" action="/<%= itemData.drinkType %>/update-item/<%= itemData.drinkName %>" method="POST" id="expenseForm">
+    <!-- <div class="form-group">
+      <label for="drinkName">Drink Name</label>
+      <input required name="drinkName" type="text" class="form-control" id="drinkName" aria-describedby="drinkNameInput" placeholder="Drink Name">
+    </div> -->
+    <div class="form-group">
+      <label for="priceInput">Price</label>
+      <input required name="priceInputName" type="number" value="<%= itemData.basePrice %>" class="form-control" id="priceInput" placeholder="Price" step="0.01" min="0">
+    </div>
+    <div class="form-group">
+      <label for="descriptionInput">Description</label>
+      <input required name="descriptionInputName" type="text" value="<%= itemData.description %>" class="form-control" id="descriptionInput" placeholder="Description">
+      <!-- <input name="categoryInputName" type="text" class="form-control" id="categoryInput" placeholder="Category"> -->
+    </div>
+    <input type="submit" value="Submit">
+    <input type="reset">
+    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+  </form>
+  
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs') %>
+</head>
+<body class="container">
+  <header>
+    <%- include('../partials/header.ejs') %>
+  </header>
+
+  <h2>Submit New Drink</h2>
+  <!-- <form onsubmit="testfunc()" id="expenseForm"> -->
+  <form onsubmit="alert('Successfully submitted!')" action="/post-beverage" method="POST" id="expenseForm">
+    <div class="form-group">
+      <label for="drinkName">Drink Name</label>
+      <input required name="drinkName" type="text" class="form-control" id="drinkName" aria-describedby="drinkNameInput" placeholder="Drink Name">
+    </div>
+    <div class="form-group">
+      <label for="priceInput">Price</label>
+      <input required name="priceInputName" type="number" class="form-control" id="priceInput" placeholder="Price" step="0.01" min="0">
+    </div>
+    <div class="form-group">
+      <label for="brandInput">Store Brand</label>
+      <input required name="brandInputName" type="text" class="form-control" id="brandInput" placeholder="Brand">
+    </div>
+    <div class  ="form-group">
+      <label for="drinkTypeInput">Drink Type</label>
+      <select required class="form-select" aria-label="Default select example" name="drinkTypeInputName" id="drinkTypeInput">
+        <option value="">select...</option>
+        <option value="Boba">Boba</option>
+        <option value="Coffee">Coffee</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="descriptionInput">Description</label>
+      <input required name="descriptionInputName" type="text" class="form-control" id="descriptionInput" placeholder="Description">
+      <!-- <input name="categoryInputName" type="text" class="form-control" id="categoryInput" placeholder="Category"> -->
+    </div>
+    <input type="submit" value="Submit">
+    <input type="reset">
+    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+  </form>
+  
+</body>
+
+</html>

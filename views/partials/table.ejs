@@ -1,0 +1,26 @@
+<% typeof tableData !== 'undefined' && tableData.forEach((tableItem) => { %>
+  <tr>
+    <td><%= tableItem.drinkName.S %></td>
+    <td><%= tableItem.basePrice.N %></td>
+    <td><%= tableItem.storeBrand.S %></td>
+    <td><%= tableItem.drinkType.S %></td>
+    <td><%= tableItem.description.S %></td>
+    <td>
+      <!-- <button onclick="sendDelete('/<%= tableItem.drinkType.S %>/item/<%= tableItem.storeBrand.S %>/<%= tableItem.drinkName.S %>')">del button</button> -->
+      <a href='/<%= tableItem.drinkType.S %>/delete-item/<%= tableItem.drinkName.S %>' class="btn btn-danger btn-sm" >Del</a>
+    </td>
+    <td>
+      <a href='/update-drink-form/<%= tableItem.storeBrand.S %>/<%= tableItem.drinkName.S %>' class="btn btn-secondary btn-sm" >Update</a>
+
+    </td>
+
+  </tr>
+<% }); %>
+
+<script>
+  async function sendDelete(value) {
+    await fetch(value, {
+      method: 'DELETE'
+    })
+  }
+</script>

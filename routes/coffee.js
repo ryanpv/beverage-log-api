@@ -5,7 +5,16 @@ import { getItem } from '../ddb_actions/getItem.js';
 import { deleteItem } from '../ddb_actions/deleteItem.js';
 import { updateItem } from '../ddb_actions/updateItem.js';
 
+
 const router = express.Router();
+
+router.route('/')
+  .get((req, res) => {
+    res.send('coffee home route')
+  })
+  .delete((req, res) => {
+    res.send('DELETE coffee route')
+  });
 
 //////////// POST COFFEE ITEM ///////////////
 router.route('/post-coffee')
@@ -51,8 +60,12 @@ router.route('/get-user-coffeeList')
 
     // try {
       const data = await queryTable(params);
-      console.log('get coffeelist', data);
-      res.send(data)
+      // console.log('get coffeelist', data.Items);
+      // res.send(data)
+
+      res.render('pages/coffee.ejs', {
+        tableData: data.Items
+      })
     // } catch (err) {
     //   console.log(err);
     // }
@@ -81,7 +94,7 @@ router.route('/item/:storeBrand/:drinkName')
       TableName: 'beverage-table',
       Key: {
         userId: 'testUser1',
-        drinkName: `${ req.params.drinkName } - ${ req.params.storeBrand }`
+        drinkName: `${ req.params.drinkName }`
       }
     };
 
@@ -92,6 +105,27 @@ router.route('/item/:storeBrand/:drinkName')
       console.log(err);
     }
   });
+
+//////////// DELETE ROUTE FOR EJS REDIRECT /////////////////
+router.route('/delete-item/:drinkName')
+  .get(async (req, res) => {
+    const params = {
+      TableName: 'beverage-table',
+      Key: {
+        userId: 'testUser1',
+        drinkName: `${ req.params.drinkName }`
+      }
+    };
+    try { 
+      const data = await deleteItem(params);
+      console.log('deleted with GET route');
+      res.redirect('/coffee/get-user-coffeelist');
+    } catch (err) {
+      console.log(err);
+    }
+
+
+  })
 
 ////////////// UPDATE PRICE/DESCRIPTION ////////////////
 router.route('/update-item')

@@ -30,7 +30,7 @@ router.route('/boba-table/:tableName')
   })
 
 ////////////////// POST BEVERAGE ITEM ////////////////////
-router.route('/post-beverage')
+router.route('/post-boba')
   .post(async (req, res) => {
     const params = {
       TableName: 'beverage-table',
@@ -54,41 +54,44 @@ router.route('/post-beverage')
   });
 
 ///////////// UPDATE BEVERAGE PRICE //////////////////////
-router.route('/update-item')
-  .put(async (req, res) => {
+router.route('/update-item/:drinkName')
+  .post(async (req, res) => {
     const params = {
       TableName: 'beverage-table',
       Key: {
         userId: 'testUser1',
-        drinkName: `${ req.body.drinkName } - ${ req.body.storeBrand }`,
+        drinkName: `${ req.params.drinkName }`,
       },
       // ProjectionExpression: "#r",
       ExpressionAttributeNames: 
-        !req.body.basePrice ? { "#d": "description" }
-        : !req.body.description ? { "#b": "basePrice" }
+        !req.body.priceInputName ? { "#d": "description" }
+        : !req.body.descriptionInputName ? { "#b": "basePrice" }
         : { "#b": "basePrice", "#d": "description" },
       // ExpressionAttributeNames: { "#b": "basePrice", "#d": "description" },
       ExpressionAttributeValues: 
-        !req.body.basePrice ? { ":d": req.body.description }
-        : !req.body.description ? { ":b": req.body.basePrice }
+        !req.body.priceInputName ? { ":d": req.body.descriptionInputName }
+        : !req.body.descriptionInputName ? { ":b": parseFloat(req.body.priceInputName) }
         : {
-            ":b": req.body.basePrice,
-            ":d": req.body.description
+            ":b": parseFloat(req.body.priceInputName),
+            ":d": req.body.descriptionInputName
           },
       // ExpressionAttributeValues: {
       //   ":b": 5.99,
       //   ":d": undefined
       // }
       UpdateExpression: 
-        !req.body.basePrice ? "set #d = :d"
-        : !req.body.description ? "set #b = :b"
+        !req.body.priceInputName ? "set #d = :d"
+        : !req.body.descriptionInputName ? "set #b = :b"
         : "set #b = :b, #d = :d",
       // UpdateExpression: "set #b = :b, #d = :d",
     };
     try {
       const data = await updateItem(params);
-      console.log('update success', data)
-      res.send(data)
+      if (data.$metadata.httpStatusCode === 200) {
+        console.log('update success', data)
+        res.redirect('/')
+      }
+      // res.send(data)
     } catch (err) {
       console.log('err', err);
     }
@@ -118,16 +121,36 @@ router.route('/item/:storeBrand/:drinkName')
       TableName: 'beverage-table',
       Key: {
         userId: 'testUser1',
-        drinkName: `${ req.params.drinkName } - ${ req.params.storeBrand }`
+        drinkName: `${ req.params.drinkName }`
       }
     };
 
     try {
       const data = await deleteItem(params);
-      res.end();
+      console.log('delete complete');
+
+      res.redirect(303, '/boba');
     } catch (err) {
       console.log(err);
     }
+  });
+
+router.route('/delete-item/:drinkName')
+  .get(async (req, res) => {
+    const params = {
+      TableName: 'beverage-table',
+      Key: {
+        userId: 'testUser1',
+        drinkName: `${ req.params.drinkName }`
+      }
+    };
+    try { 
+      const data = await deleteItem(params);
+      console.log('deleted with GET route');
+      res.redirect('/boba/get-user-coffeelist');
+    } catch (err) {
+      console.log(err);
+    };
   });
 
 ///////////// QUERY TABLE FOR SPECIFIC USER ITEMS /////////////// 
@@ -150,8 +173,11 @@ router.route('/user-posts')
     }
     
     const data = await queryTable(params);
-    console.log(data);
-    res.send(data)
+    // console.log(data);
+    // res.send(data)
+    res.render('pages/boba.ejs', {
+      tableData: data.Items
+    })
   });
 
 /////////// QUERY TABLE FOR SPECIFIC BRAND /////////////////

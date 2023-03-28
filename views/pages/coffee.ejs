@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head.ejs') %>
+</head>
+<body class="container">
+  <header>
+    <%- include('../partials/header.ejs') %>
+    <h2>Coffee Page</h2>
+  </header>
+
+  <a href="/submit-new-drink" role="button" class="btn btn-secondary btn-sm" >+ Add</a>
+      <!-- Render table with data  -->
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Drink</th>
+            <th>Price</th>
+            <th>Store Brand</th>
+            <th>Drink Type</th>
+            <th>Description</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- include('../partials/table.ejs') %>
+        </tbody>
+      </table>
+
+</body>
+</html>
